@@ -31,14 +31,12 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     sql
-     (python :variables
-             python-enable-yapf-format-on-save t)
      ruby
+     javascript
+     sql
      csv
      yaml
-     javascript
-     html
+     python
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-enable-clang-support t
@@ -60,12 +58,11 @@ values."
             shell-default-shell 'eshell
             shell-default-height 100)
      (spell-checking :variables
-                     enable-flyspell-auto-completion t)
+                     enable-flyspell-auto-completion nil)
      syntax-checking
      version-control
      semantic
      cscope
-     speed-reading
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -151,7 +148,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Droid Sans Mono"
-                               :size 14
+                               :size 13
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -263,7 +260,7 @@ values."
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
    ;; when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smooth-scrolling nil
    ;; If non nil line numbers are turned on in all `prog-mode' and `text-mode'
    ;; derivatives. If set to `relative', also turns on relative line numbers.
    ;; (default nil)
@@ -300,7 +297,7 @@ values."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup 'trailing
    ))
-
+`
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
 It is called immediately after `dotspacemacs/init', before layer configuration
@@ -317,24 +314,15 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  (defun display-ansi-colors ()
+    (interactive)
+    (ansi-color-apply-on-region (point-min) (point-max)))
   (setq-default evil-escape-key-sequence "jk")
-  (setenv "PATH" "/usr/local/bin:/usr/bin:/bin:/home/reductions/Work/go/bin")
+  (setq projectile-mode-line "Projectile")
   (put 'helm-make-build-dir 'safe-local-variable 'stringp)
   (spacemacs|disable-company eshell-mode)
-  (golden-ratio-mode)
-  (spacemacs/toggle-centered-point-globally-on)
-  (spacemacs/toggle-automatic-symbol-highlight-on)
-  (add-hook 'prog-mode-hook (lambda () (fci-mode 1)))
-  )
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(paradox-github-token t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+  ;; (golden-ratio-mode)
+  ;; (spacemacs/toggle-centered-point-globally-on)
+  ;;(spacemacs/toggle-automatic-symbol-highlight-on)
+  (smartparens-global-mode)
+  (add-hook 'prog-mode-hook (lambda () (fci-mode 1))))
