@@ -34,31 +34,22 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     (go :variables
-         ;; go-use-gometalinter t
-         go-tab-width 4)
-     erlang
-     elixir
-     csv
-     yaml
-     javascript
-     html
+     (auto-completion :variables
+                      auto-completion-enable-snippets-in-popup t)
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-enable-clang-support t
             flycheck-clang-language-standard "c++17"
             c-default-style "bsd"
             c-basic-offset 4)
-     helm
-     themes-megapack
-     (auto-completion :variables
-                      auto-completion-enable-snippets-in-popup t)
-     better-defaults
+     elixir
      emacs-lisp
      git
-     (markdown :variables
-               markdown-live-preview-engine 'vmd)
+     html
+     helm
+     javascript
      org
+     semantic
      (shell :variables
             shell-default-position 'bottom
             shell-default-full-span nil
@@ -67,9 +58,8 @@ This function should only modify configuration layer settings."
      (spell-checking :variables
                      enable-flyspell-auto-completion t)
      syntax-checking
+     themes-megapack
      version-control
-     semantic
-     cscope
      )
 
    ;; List of additional packages that will be installed without being
@@ -469,8 +459,6 @@ before packages are loaded."
   (golden-ratio-mode)
   ;; (spacemacs/toggle-centered-point-globally-on)
   (spacemacs/toggle-automatic-symbol-highlight-on)
-  (add-hook 'elixir-mode-hook
-            (lambda () (add-hook 'before-save-hook 'elixir-format-before-save)))
   (add-hook 'prog-mode-hook (lambda () (fci-mode 1))))
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -485,9 +473,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (zenburn-theme zen-and-art-theme yasnippet-snippets yaml-mode xterm-color white-sand-theme web-mode web-beautify vmd-mode unfill underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme stickyfunc-enhance srefactor spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme rebecca-theme realgud test-simple loc-changes load-relative railscasts-theme purple-haze-theme pug-mode professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme orgit organic-green-theme org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-brain omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme ob-elixir noctilux-theme naquadah-theme mwim mustang-theme multi-term monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme material-theme markdown-toc markdown-mode majapahit-theme magit-gitflow madhat2r-theme lush-theme livid-mode skewer-mode light-soap-theme less-css-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc jbeans-theme jazz-theme ir-black-theme inkpot-theme impatient-mode simple-httpd htmlize heroku-theme hemisu-theme helm-rtags helm-gitignore helm-css-scss helm-cscope xcscope helm-company helm-c-yasnippet hc-zenburn-theme haml-mode gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-c-style godoctor go-tag go-rename go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md gandalf-theme fuzzy flyspell-popup flyspell-correct-helm flyspell-correct flycheck-rtags flycheck-pos-tip pos-tip flycheck-mix flycheck-credo flycheck flatui-theme flatland-theme farmhouse-theme exotica-theme evil-org evil-magit magit magit-popup git-commit ghub with-editor espresso-theme eshell-z eshell-prompt-extras esh-help erlang emmet-mode elixir-format dracula-theme django-theme disaster diff-hl darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-rtags rtags company-go go-mode company-c-headers color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized coffee-mode clues-theme clang-format cherry-blossom-theme busybee-theme bubbleberry-theme browse-at-remote birds-of-paradise-plus-theme badwolf-theme auto-yasnippet yasnippet auto-dictionary apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes alchemist company elixir-mode afternoon-theme ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org symon string-inflection spaceline-all-the-icons restart-emacs request rainbow-delimiters popwin persp-mode pcre2el password-generator paradox overseer org-plus-contrib org-bullets open-junk-file neotree nameless move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio font-lock+ flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump diminish define-word counsel-projectile column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
+ ')
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
