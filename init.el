@@ -38,7 +38,9 @@ This function should only modify configuration layer settings."
      (c-c++ :variables
             c-c++-enable-clang-format-on-save t
             c-c++-lsp-enable-semantic-highlight 'rainbow
-            c-c++-adopt-subprojects t)
+            c-c++-adopt-subprojects t
+            c-default-style "lucid"
+            )
      cmake
      emacs-lisp
      git
@@ -556,6 +558,21 @@ before packages are loaded."
   (add-to-list 'auto-mode-alist '("\\.log\\'" . text-mode))
 
   (setq-default evil-escape-key-sequence "jk")
+
+  (c-add-style "lucid" '(
+                         (c-basic-offset . 4)
+                         (c-comment-only-line-offset . 0)
+                         (c-offsets-alist
+                          (statement-block-intro . +)
+                          (knr-argdecl-intro . +)
+                          (substatement-open . 0)
+                          (substatement-label . 0)
+                          (label . 0)
+                          (statement-cont . +)
+                          (inline-open . 0)
+                          (brace-list-intro first c-lineup-2nd-brace-entry-in-arglist c-lineup-class-decl-init-+ +)
+                          (inexpr-class . 0))
+                         ))
   )
 
 
