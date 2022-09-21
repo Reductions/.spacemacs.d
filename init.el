@@ -17,10 +17,11 @@ This function should only modify configuration layer settings."
    ;; not listed in variable `dotspacemacs-configuration-layers'), `all' will
    ;; lazy install any layer that support lazy installation even the layers
    ;; listed in `dotspacemacs-configuration-layers'. `nil' disable the lazy
+
    ;; installation feature and you have to explicitly list a layer in the
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation 'unused
+   dotspacemacs-enable-lazy-installation nil
 
    ;; If non-nil then Spacemacs will ask for confirmation before installing
    ;; a layer lazily. (default t)
@@ -36,31 +37,57 @@ This function should only modify configuration layer settings."
      (auto-completion :variables
                       auto-completion-enable-snippets-in-popup t)
      (c-c++ :variables
+            c-c++-default-mode-for-headers 'c++-mode
+            c-c++-backend 'lsp-clangd
+            c-c++-enable-rtags-completion nil
             c-c++-enable-clang-format-on-save t
             c-c++-lsp-enable-semantic-highlight 'rainbow
             c-c++-adopt-subprojects t
             c-default-style "lucid"
             )
      cmake
+     csv
+     dap
+     (dart :variables
+           lsp-dart-sdk-dir "/home/reductions/.asdf/installs/dart/2.14.4/dart-sdk"
+           )
      emacs-lisp
      git
      helm
      html
+     (javascript :variables
+                 javascript-fmt-tool 'web-beautify
+                 javascript-import-tool 'prettier
+                 javascript-backend 'lsp
+                 javascript-lsp-linter nil
+                 javascript-fmt-on-save t
+                 )
      json
      (lsp :variables
           lsp-headerline-breadcrumb-enable nil
-          lsp-ui-doc-enable t)
-     markdown
+          )
+     (markdown :variables
+               markdown-live-preview-engine 'vmd
+               )
      multiple-cursors
      org
+     protobuf
      (shell :variables
             shell-default-position 'bottom
             shell-default-full-span nil
             shell-default-shell 'eshell
-            shell-default-height 100)
+            shell-default-height 100
+            )
      spacemacs-project
      spell-checking
      syntax-checking
+     (typescript :variable
+                 typescript-backend 'lsp
+                 typescript-lsp-linter nil
+                 typescript-fmt-on-save t
+                 typescript-fmt-tool 'prettier
+                 typescript-linter 'eslint
+                 )
      version-control
      yaml
      )
@@ -74,7 +101,9 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      (term-cursor :location (recipe :fetcher github :repo "h0d/term-cursor.el" ))
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -141,18 +170,18 @@ It should only modify the values of Spacemacs settings."
    ;; Setting this >= 1 MB should increase performance for lsp servers
    ;; in emacs 27.
    ;; (default (* 1024 1024))
-   dotspacemacs-read-process-output-max (* 64 1024 1024)
+   dotspacemacs-read-process-output-max (* 128 1024 1024)
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
    ;; latest version of packages from MELPA. Spacelpa is currently in
    ;; experimental state please use only for testing purposes.
    ;; (default nil)
-   dotspacemacs-use-spacelpa t
+   dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
    ;; (default t)
-   dotspacemacs-verify-spacelpa-archives t
+   dotspacemacs-verify-spacelpa-archives nil
 
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
@@ -233,8 +262,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(tsdh-dark
-                         spacemacs-dark
+   dotspacemacs-themes '(spacemacs-dark
+                         tsdh-dark
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -563,6 +592,7 @@ before packages are loaded."
                          (c-basic-offset . 4)
                          (c-comment-only-line-offset . 0)
                          (c-offsets-alist
+                          (innamespace . 0)
                           (statement-block-intro . +)
                           (knr-argdecl-intro . +)
                           (substatement-open . 0)
@@ -571,8 +601,15 @@ before packages are loaded."
                           (statement-cont . +)
                           (inline-open . 0)
                           (brace-list-intro first c-lineup-2nd-brace-entry-in-arglist c-lineup-class-decl-init-+ +)
-                          (inexpr-class . 0))
+                          (inexpr-class . 0)
+                          (case-label . +)
+                          )
                          ))
+
+  (spacemacs/toggle-centered-point-globally-on)
+  ;; (global-term-cursor-mode)
+  (setq clang-format-executable "/home/reductions/Work/toolset/clang-format/4.0.1/Linux/clang-format")
+  (setq undo-tree-auto-save-history nil)
   )
 
 
@@ -590,7 +627,9 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(dap-mode bui yasnippet-snippets yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package unkillable-scratch undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters quickrun pug-mode prettier-js popwin persistent-scratch pcre2el password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file nameless multi-term multi-line mmm-mode markdown-toc macrostep lsp-ui lsp-treemacs lsp-origami lorem-ipsum link-hint json-navigator json-mode info+ indent-guide impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-ctest helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md gendoxy fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode disaster dired-quick-sort diminish define-word cpp-auto-include company-ycmd company-web company-rtags company-c-headers column-enforce-mode cmake-mode clean-aindent-mode centered-cursor-mode ccls browse-at-remote auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
+   '(yapfify stickyfunc-enhance sphinx-doc pytest pyenv-mode pydoc py-isort poetry pippel pipenv pyvenv pip-requirements nose lsp-python-ms lsp-pyright live-py-mode importmagic epc ctable concurrent helm-pydoc helm-cscope xcscope cython-mode company-anaconda blacken anaconda-mode pythonic tern npm-mode nodejs-repl livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc import-js grizzl helm-gtags ggtags counsel-gtags counsel swiper ivy add-node-modules-path dap-mode bui yasnippet-snippets yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package unkillable-scratch  treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters quickrun pug-mode prettier-js popwin persistent-scratch pcre2el password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file nameless multi-term multi-line mmm-mode markdown-toc macrostep lsp-ui lsp-treemacs lsp-origami lorem-ipsum link-hint json-navigator json-mode info+ indent-guide impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-ctest helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md gendoxy fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotenv-mode disaster dired-quick-sort diminish define-word cpp-auto-include company-ycmd company-web company-rtags company-c-headers column-enforce-mode cmake-mode clean-aindent-mode centered-cursor-mode ccls browse-at-remote auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))
+ '(safe-local-variable-values
+   '((projectile-project-compilation-cmd . "./build.sh make debug"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
